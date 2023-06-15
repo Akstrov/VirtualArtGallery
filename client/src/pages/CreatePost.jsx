@@ -33,7 +33,7 @@ const CreatePost = () => {
         //   }
         // );
         const response = await axios.post(
-          'http://localhost:8080/api/v1/midjourney',
+          '/api/v1/midjourney',
           {
             prompt: form.prompt,
           },
@@ -75,15 +75,11 @@ const CreatePost = () => {
         //     body: JSON.stringify(form),
         //   }
         // );
-        const response = await axios.post(
-          'http://localhost:8080/api/v1/posts',
-          form,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        const response = await axios.post('/api/v1/posts', form, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         await response.data;
         navigate('/');
       } catch (error) {
