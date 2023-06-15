@@ -12,6 +12,8 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+//static
+app.use(express.static('dist'));
 
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/stable-diffusion', stableDiffusionRoutes);
