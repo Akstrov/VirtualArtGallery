@@ -19,15 +19,18 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('/api/v1/midjourney', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt: form.prompt,
-          }),
-        });
+        const response = await fetch(
+          'https://virtual-art-gallery.onrender.com/api/v1/midjourney',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              prompt: form.prompt,
+            }),
+          }
+        );
 
         const data = await response.json();
         console.log(data);
@@ -50,13 +53,16 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('/api/v1/posts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(form),
-        });
+        const response = await fetch(
+          'https://virtual-art-gallery.onrender.com/api/v1/posts',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(form),
+          }
+        );
         await response.json();
         navigate('/');
       } catch (error) {
