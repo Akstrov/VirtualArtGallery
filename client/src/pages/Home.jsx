@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Loader, Card, FormField } from '../components';
+import axios from 'axios';
 
 const RenderCards = ({ data, title }) => {
   if (data?.length > 0) {
@@ -22,18 +23,25 @@ const Home = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          'https://virtual-art-gallery.onrender.com/api/v1/posts',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        // const response = await fetch(
+        //   'https://virtual-art-gallery.onrender.com/api/v1/posts',
+        //   {
+        //     method: 'GET',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //   }
+        // );
+        const response = await axios.get('http://localhost:8080/api/v1/posts', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log(response);
 
-        if (response.ok) {
-          const result = await response.json();
+        if (response) {
+          const result = await response.data;
+          console.log(result);
           setAllPosts(result.data.reverse());
         }
       } catch (error) {

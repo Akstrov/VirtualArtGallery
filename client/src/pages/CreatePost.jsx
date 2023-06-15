@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
@@ -19,20 +20,31 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch(
-          'https://virtual-art-gallery.onrender.com/api/v1/midjourney',
+        // const response = await fetch(
+        //   'https://virtual-art-gallery.onrender.com/api/v1/midjourney',
+        //   {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //       prompt: form.prompt,
+        //     }),
+        //   }
+        // );
+        const response = await axios.post(
+          'http://localhost:8080/api/v1/midjourney',
           {
-            method: 'POST',
+            prompt: form.prompt,
+          },
+          {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              prompt: form.prompt,
-            }),
           }
         );
 
-        const data = await response.json();
+        const data = await response.data;
         console.log(data);
         setForm({
           ...form,
@@ -53,17 +65,26 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch(
-          'https://virtual-art-gallery.onrender.com/api/v1/posts',
+        // const response = await fetch(
+        //   'https://virtual-art-gallery.onrender.com/api/v1/posts',
+        //   {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(form),
+        //   }
+        // );
+        const response = await axios.post(
+          'http://localhost:8080/api/v1/posts',
+          form,
           {
-            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(form),
           }
         );
-        await response.json();
+        await response.data;
         navigate('/');
       } catch (error) {
         console.log(error);

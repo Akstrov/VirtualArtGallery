@@ -1,5 +1,6 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
+import axios from 'axios';
 
 dotenv.config();
 
@@ -17,22 +18,32 @@ router.route('/').post(async (req, res) => {
     object in the body with a single property "inputs" that contains the value of the "prompt"
     variable from the request body. The response from the API is then stored in the "response"
     variable. */
-    const response = await fetch(
+    // const response = await fetch(
+    //   'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
+    //   {
+    //     headers: {
+    //       Authorization: process.env.HF_TOKEN,
+    //     },
+    //     method: 'POST',
+    //     body: JSON.stringify({ inputs: prompt }),
+    //   }
+    // );
+    const response = await axios.post(
       'https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5',
+      { inputs: prompt },
       {
         headers: {
           Authorization: process.env.HF_TOKEN,
+          'Content-Type': 'application/json',
         },
-        method: 'POST',
-        body: JSON.stringify({ inputs: prompt }),
+        responseType: 'arraybuffer',
       }
     );
 
-    const result = await response.blob();
     /* This code is converting the image data received from the API response into a base64 encoded
    string that can be used to display the image in a web page. */
-    const imageBuffer = await result.arrayBuffer();
-    const base64String = Buffer.from(imageBuffer).toString('base64');
+    const base64String = Buffer.from(response.data).toString('base64');
+
     const img = `data:image/jpeg;base64,${base64String}`;
 
     /* `res.status(200).json({ photo: img });` is sending a response to the client with a status code of
